@@ -21,7 +21,14 @@ class DataFetcher:
     @staticmethod
     def ohlcv(symbol: str, interval: str = "15m", period: str = "5d") -> pd.DataFrame:
         try:
-            df = yf.Ticker(symbol).history(period=period, interval=interval)
+            df = yf.download(
+    symbol,
+    period=period,
+    interval=interval,
+    auto_adjust=True,
+    progress=False,
+    threads=False,
+)
             if df.empty:
                 return pd.DataFrame()
             df.columns = [c.lower() for c in df.columns]
@@ -42,10 +49,21 @@ class DataFetcher:
     @staticmethod
     def spot(symbol: str) -> float:
         try:
-            info = yf.Ticker(symbol).fast_info
-            return round(float(info.get("lastPrice", 0) or
-                               yf.Ticker(symbol).history(period="1d").iloc[-1]["Close"]), 2)
-        except:
+            df = yf.download(
+                symbol,
+                period="5d",
+                auto_adjust=True,
+                progress=False,
+                threads=False,
+            )
+
+            if df.empty:
+                return 0.0
+
+            return round(float(df["Close"].iloc[-1]), 2)
+
+        except Exception as e:
+            log.error(f"Spot fetch error {symbol}: {e}")
             return 0.0
 
     @staticmethod
