@@ -18,9 +18,9 @@ def env_int(key, d):
 
 CONFIG = {
     "email": {
-        "sender_email":    env("rishankaggarwal1994@gmail.com",    ""),
-        "sender_password": env("cvrn jbhd xlrv xjwx", ""),
-        "recipient_email": env("rishankaggarwal1994@gmail.com"),
+        "sender_email":    "rishankaggarwal1994@gmail.com",
+        "sender_password": "cvrn jbhd xlrv xjwx",
+        "recipient_email": "rishankaggarwal1994@gmail.com",
         "smtp_host":       "smtp.gmail.com",
         "smtp_port":       587,
     },
