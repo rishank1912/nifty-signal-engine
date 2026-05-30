@@ -22,16 +22,19 @@ class DataFetcher:
     def ohlcv(symbol: str, interval: str = "15m", period: str = "5d") -> pd.DataFrame:
         try:
             df = yf.download(
-    symbol,
-    period=period,
-    interval=interval,
-    auto_adjust=True,
-    progress=False,
-    threads=False,
-)
+            symbol,
+            period=period,
+            interval=interval,
+            auto_adjust=True,
+            progress=False,
+            threads=False,
+            )
             if df.empty:
                 return pd.DataFrame()
-            df.columns = [c.lower() for c in df.columns]
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+
+            df.columns = [str(c).lower() for c in df.columns]
             return df[["open","high","low","close","volume"]].dropna()
         except Exception as e:
             log.error(f"Fetch error {symbol}@{interval}: {e}")
@@ -60,7 +63,8 @@ class DataFetcher:
             if df.empty:
                 return 0.0
 
-            return round(float(df["Close"].iloc[-1]), 2)
+            close = df["Close"].squeeze()
+            return round(float(close.iloc[-1]), 2)
 
         except Exception as e:
             log.error(f"Spot fetch error {symbol}: {e}")
