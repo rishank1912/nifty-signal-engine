@@ -685,17 +685,20 @@ async def dashboard():
   <div class="card" style="border-color:#10b98133">
     <div class="ct" style="color:#10b981">⚡ Event-Driven Firing Logic</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
-      {''.join(f"""<div style="background:#0d1526;border-radius:8px;padding:12px">
-        <div style="font-size:10px;color:#10b981;font-weight:600;margin-bottom:5px">{title}</div>
-        <div style="font-size:12px;color:#64748b;line-height:1.6">{body}</div>
-      </div>""" for title, body in [
+      {"".join(
+    f'<div style="background:#0d1526;border-radius:8px;padding:12px">'
+    f'<div style="font-size:10px;color:#10b981;font-weight:600;margin-bottom:5px">{title}</div>'
+    f'<div style="font-size:12px;color:#64748b;line-height:1.6">{body}</div>'
+    f'</div>'
+    for title, body in [
         ("Scan Interval", f"Every {SCAN_INTERVAL_SEC//60} minutes during market hours (9:15–3:30 IST)"),
         ("Fire Condition", "Confidence = HIGH or VERY HIGH only. LOW and MEDIUM are logged but never emailed."),
         ("Cooldown", f"{COOLDOWN_MIN}-min per-strategy cooldown prevents duplicate spam alerts."),
         ("Override Rules", "Cooldown bypassed if direction FLIPS or confidence IMPROVES to next level."),
         ("Consensus Alert", "Separate email if 3+ strategies agree on same direction simultaneously."),
         ("Email Format", "Entry · Stop Loss · Target 1 & 2 · Position size (lots) · R:R · All reasons"),
-      ])}
+    ]
+)}
     </div>
   </div>
 
