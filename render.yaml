@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: nifty-signal-engine
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free                          # upgrade to 'starter' for always-on
+    healthCheckPath: /health
+    autoDeploy: true
+
+    envVars:
+      - key: SENDER_EMAIL
+        sync: false                     # set manually in Render dashboard
+      - key: SENDER_PASSWORD
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: RECIPIENT_EMAIL
+        value: rishankaggarwal1994@gmail.com
+      - key: CAPITAL
+        value: "1000000"
+      - key: RISK_PCT
+        value: "0.015"
+      - key: TZ
+        value: Asia/Kolkata
+      - key: PORT
+        value: "10000"                  # Render uses port 10000 by default

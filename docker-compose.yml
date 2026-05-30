@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  nifty-api:
+    build: .
+    container_name: nifty-signal-engine
+    restart: unless-stopped          # auto-restart if it crashes
+    ports:
+      - "8000:8000"
+    environment:
+      # ── REQUIRED — fill these in ──────────────────────────
+      - SENDER_EMAIL=${SENDER_EMAIL}           # your Gmail
+      - SENDER_PASSWORD=${SENDER_PASSWORD}     # Gmail App Password
+      - API_KEY=${API_KEY:-nifty-secret-2024}
+
+      # ── OPTIONAL — sensible defaults ─────────────────────
+      - RECIPIENT_EMAIL=rishankaggarwal1994@gmail.com
+      - CAPITAL=1000000
+      - RISK_PCT=0.015
+      - PORT=8000
+      - TZ=Asia/Kolkata
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    labels:
+      - "com.nifty.description=Nifty 50 Real-Time Signal Engine"
+      - "com.nifty.version=4.0.0"
